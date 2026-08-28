@@ -452,3 +452,40 @@ export const lecturerApi = {
   // School events (public CMS endpoint, used by the calendar)
   schoolEvents: () => api.get<SchoolEvent[]>('/website/events'),
 };
+
+// ---- Auth (public) ----
+
+export const authApi = {
+  selfRegisterLecturer: (payload: {
+    staffNumber: string;
+    departmentId: string;
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    phone?: string;
+    schoolId: string;
+  }) => api.post<{ success: boolean; message: string }>('/auth/self-register-lecturer', payload),
+};
+
+// ---- Academics (public) ----
+
+export interface School {
+  id: string;
+  name: string;
+  slug: string;
+}
+
+export interface Department {
+  id: string;
+  name: string;
+  code: string;
+  facultyId: string;
+  faculty: { id: string; name: string };
+}
+
+export const academicsApi = {
+  schools: () => api.get<School[]>('/academics/schools'),
+  departments: (schoolId: string) =>
+    api.get<Department[]>(`/academics/departments?schoolId=${encodeURIComponent(schoolId)}`),
+};
